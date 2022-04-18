@@ -4,14 +4,36 @@ class App extends React.Component {
     idx: 1,
     users: [],
   }
-  getUser = () => {
-
+  getData = async (_idx) => {
+     const { data } = await axios.get(url + _idx);
+     return data;
   }
-  async componentDidMount() {
-    const { data } = await axios.get(url + this.state.idx);
+  getUser = async () => {
+    const idx = this.state.idx + 1;
+    const user = await this.getData(idx);
+    const users = [...this.state.users, user];
+    this.setState({ idx, users })
+  }
+  /* 
+  componentDidMount() // 최초 한번
+  componentDidUpdate() // render() 실행될떄마다
+  componentWillUnmount() // Component 가 화면에서 퇴장할때
+  */
+ ComponentWillUnmount() {
+   console.log('Unmount')
+ }
+ componentDidUpdate() {
+   if(this.state.a) {
+
+   }
+   console.log('update');
+ }
+  async componentDidMount() { // 최초 Component가 생성될때 한번 실행된다.
+    console.log('mount')
+    const user = await this.getData(this.state.idx);
     // console.log(data);
     this.setState({
-      users: [data],
+      users: [user],
     });
   }
   render() {
