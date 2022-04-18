@@ -29,14 +29,17 @@ const users = [
 ]
 
 const el3 = (
-  <ul className={containerClass} title="Title">
-    { users.map(user => (
-      <li>
-        { user.name }
-        <span>{ user.age }</span>
-      </li>
-    )) }
+  <ul className={ containerClass } title="Title" style={{"color": "blue", "fontSize": "3em"}}>
+    {
+      users.map(user => (
+        <li>{user.name} | {user.age}</li>
+      ))
+    } 
   </ul>
 );
 
-ReactDOM.render(el3, app);
+/* [<li>{users[0].name} | {users[0].age}</li>,
+<li>{users[1].name} | {users[1].age}</li>,
+<li>{users[2].name} | {users[2].age}</li>] */
+
+ReactDOM.render(el3, document.querySelector('#app'));
