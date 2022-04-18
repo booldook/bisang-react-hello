@@ -12,8 +12,7 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div className="container">
-        <div></div>
+      <div className="container text-center">
         <img src={this.state.src}/>
         <div>
           <button className="btn btn-primary" onClick={this.onClick}>바꿔</button>
