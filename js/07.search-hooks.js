@@ -36,8 +36,8 @@ const App = () => {
         </thead>
         <tbody>
           {
-            users.map((user, i) => (
-              <tr key={i}>
+            users.map((user, index) => (
+              <tr key={index}>
                 <th>{ user.id }</th>
                 <th>{ user.name }</th>
                 <th>{ user.username }</th>
