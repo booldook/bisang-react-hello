@@ -8,9 +8,13 @@
 const { Component, createRef } = React;
 
 class Title extends Component {
+  style = {
+    height: '40px',
+    marginTop: '15px'
+  }
   render() {
     return (
-      <div>타이틀</div>
+      <h1 style={this.style}>{ this.props.txt }</h1>
     )
   }
 }
@@ -33,29 +37,38 @@ class CloseButton extends Component {
 
 class Input extends Component {
   state = {
-    text: '',
+    txt: '',
   }
   inputRef = createRef(); // ref로 DOM을 init
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.props.onSubmitForm(this.state.txt);
+    this.onReset();
+  }
   onChange = (e) => {
     this.setState({
       ...this.state,
-      text: e.target.value
+      txt: e.target.value
     })
-    this.props.getValue(this.state.text);
+    this.props.onInput(this.inputRef.current.value);
   }
   onDelete = () => {
     this.setState({
       ...this.state,
-      text: ''
+      txt: ''
     })
+    this.props.onInput('');
+    this.onReset();
+  }
+  onReset = () => {
     this.inputRef.current.value = '';
     this.inputRef.current.focus();
   }
   render() {
     return (
-      <form className="position-relative">
+      <form className="position-relative" onSubmit={this.onSubmit}>
         <input type="text" className="form-control" onChange={this.onChange} ref={this.inputRef} autoFocus />
-        { this.state.text.length ? <CloseButton onDelete={this.onDelete} /> : '' }
+        { this.state.txt.length ? <CloseButton onDelete={this.onDelete} /> : '' }
       </form>
     )
   }
@@ -64,27 +77,41 @@ class Input extends Component {
 class List extends Component {
   render() {
     return (
-      <div>리스트</div>
+      <div>{this.props.list}</div>
     )
   }
 }
 
 class App extends Component {
   state = {
-    text: '',
+    txt: '',
+    lists: [],
   }
   onInput = (value) => {
     this.setState({
       ...this.state,
-      text: value
+      txt: value
+    })
+  }
+  onSubmitForm = (value) => {
+    this.setState({
+      txt: '',
+      lists: [...this.state.lists, value]
+    });
+  }
+  onClick = () => {
+    this.setState({
+      txt: '',
+      lists: [],
     })
   }
   render() {
     return (
       <div className="container">
-        <Title />
-        <Input getValue={this.onInput} />
-        <List />
+        <Title txt={this.state.txt} />
+        <Input onInput={this.onInput} onSubmitForm={this.onSubmitForm} />
+        {this.state.lists.map((list, index) => (<List key={`list+${index}`} list={list}/>))}
+        <button className="btn btn-primary my-3" onClick={this.onClick}>리스트 삭제</button>
       </div>
     )
   }
